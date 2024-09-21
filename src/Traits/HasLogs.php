@@ -17,4 +17,9 @@ trait HasLogs {
     {
         $this->logStack[] = $entry;
     }
+    
+    protected function clearLogs(): void
+    {
+      $this->logStack = [];
+    }
 }

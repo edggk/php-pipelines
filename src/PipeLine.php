@@ -12,6 +12,7 @@ class PipeLine implements DebuggableInterface {
     use HasLogs;
 
     protected bool $debugging = false;
+    protected PipeBlock | bool $hadBlockage = false;
 
     /** @var Array<callable> $commands */
     protected array $commands = [];
@@ -28,6 +29,7 @@ class PipeLine implements DebuggableInterface {
 
     public function run(mixed $value): mixed
     {
+        $this->hadBlockage = false;
         $this->piper->setValue($value);
 
         if($this->debugging){
@@ -37,6 +39,8 @@ class PipeLine implements DebuggableInterface {
         foreach($this->commands as $command){
             $this->piper->pipe($command);
         }
+
+        $this->hadBlockage = $this->piper->blockage();
 
         if($this->debugging){
             $this->log(
@@ -53,6 +57,11 @@ class PipeLine implements DebuggableInterface {
         $this->debugging = $enable;
     
         return $this;
+    }
+
+    public function hadBlockage(): bool
+    {
+        return $this->hadBlockage;
     }
 }
 

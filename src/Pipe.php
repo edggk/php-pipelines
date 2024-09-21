@@ -55,6 +55,11 @@ class Pipe implements PipeInterface
         return $this;
     }
 
+    public function blockage(): PipeBlock | bool
+    {
+        return $this->blocked;
+    }
+
     public function value(): mixed
     {
         return $this->value;
